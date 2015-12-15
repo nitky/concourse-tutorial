@@ -20,7 +20,7 @@ vagrant up
 
 [![initial](http://cl.ly/image/401b2z2B3w17/no-pipelines.png)](http://192.168.100.4:8080/)
 
-使用しているOSに応じた`fly`コンソールインターフェースをダウンロードします。
+使用しているOSに応じた`fly`インターフェースをダウンロードします。
 
 ![cli](http://cl.ly/image/1r462S1m1j1H/fly_cli.png)
 
@@ -32,25 +32,26 @@ sudo mv ~/Downloads/fly /usr/local/bin
 sudo chmod 0755 /usr/local/bin/fly
 ```
 
-Target Concourse
+Concourse のターゲット
 ----------------
 
-In the spirit of declaring absolutely everything you do to get absolutely the same result every time, the `fly` CLI requires that you specify the target API for every `fly` request.
+いつも完全に同じ結果を得るために、`fly` はすべての`fly`リクエストに対する特別なターゲットAPIを要求します。
 
-First, alias it with a name `tutorial` (this name is used by all the tutorial wrapper scripts):
+まず、`tutorial`という名前のエイリアスを与えます。（`tutorial`は全てのチュートリアルラッパースクリプトとして使用されています）
 
 ```
 fly --target tutorial login  --concourse-url http://192.168.100.4:8080 sync
 
 ```
 
-You can now see this saved target Concourse API in a local file:
+ここまでの操作によって、ローカルファイルの中にある Concourse API の保存されたターゲットを見ることができます。
+
 
 ```
 cat ~/.flyrc
 ```
 
-Shows a simple YAML file with the API, credentials etc:
+APIや資格情報などの情報は以下のようなシンプルなYAMLファイルで表されます。
 
 ```yaml
 targets:
@@ -61,7 +62,7 @@ targets:
     cert: ""
 ```
 
-When we use the `fly` command we will target this Concourse API using `fly -t tutorial`.
+`fly` コマンドを使うとき、我々は `fly -t tutorial`と打つことで、このConcourse APIをターゲットにできます。
 
 > @alexsuraci: I promise you'll end up liking it more than having an implicit target state :) Makes reusing commands from shell history much less dangerous (rogue fly configure can be bad)
 
