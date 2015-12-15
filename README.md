@@ -1,30 +1,31 @@
-Concourse Tutorial
+Concourse チュートリアル（日本語訳）
 ==================
 
-Learn to use https://concourse.ci with this linear sequence of tutorials. Learn each concept that builds on the previous concept.
+このチュートリアルを用いて、https://concourse.ci の使い方とコンセプトをステップバイステップで学びましょう。
 
-Getting started
+はじめに
 ---------------
 
-Install Vagrant/Virtualbox.
+Vagrant/Virtualboxをインストールします。
 
-Fetch this tutorial and start a server
+このチュートリアルを取得して、さぁ始めましょう。
 
 ```
-git clone git@github.com:starkandwayne/concourse-tutorial.git
+git clone git@github.com:nitky/concourse-tutorial.git
 cd concourse-tutorial
 vagrant up
 ```
 
-Open http://192.168.100.4:8080/ in your browser:
+ブラウザで http://192.168.100.4:8080/ を開いてください。
 
 [![initial](http://cl.ly/image/401b2z2B3w17/no-pipelines.png)](http://192.168.100.4:8080/)
 
-Once the page loads in your browser, click to download the `fly` CLI appropriate for your operating system:
+使用しているOSに応じた`fly`コンソールインターフェースをダウンロードします。
 
 ![cli](http://cl.ly/image/1r462S1m1j1H/fly_cli.png)
 
-Once downloaded, copy the `fly` binary into your path (`$PATH`), such as `/usr/local/bin` or `~/bin`. Don't forget to also make it executable. For example,
+ダウンロードしたら, 実行ファイル`fly` を`/usr/local/bin` や `~/bin`などの (`$PATH`)が通ったフォルダに入れてください。また、`fly`のファイルを実行可能にすることを忘れないでください。実行可能にするためには、以下のコマンドを使用します。
+
 ```
 sudo mkdir -p /usr/local/bin
 sudo mv ~/Downloads/fly /usr/local/bin
