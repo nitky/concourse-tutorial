@@ -24,7 +24,7 @@ vagrant up
 
 ![cli](http://cl.ly/image/1r462S1m1j1H/fly_cli.png)
 
-ダウンロードしたら, 実行ファイル`fly` を`/usr/local/bin` や `~/bin`などの (`$PATH`)が通ったフォルダに入れてください。また、`fly`のファイルを実行可能にすることを忘れないでください。実行可能にするためには、以下のコマンドを使用します。
+ダウンロードしたら, 実行ファイル`fly` を`/usr/local/bin` や `~/bin`などの (`$PATH`)が通ったフォルダに入れてください。また、`fly`のファイルを実行可能にすることを忘れないでください。実行権限を与えるには、以下のコマンドを使用します。
 
 ```
 sudo mkdir -p /usr/local/bin
@@ -37,7 +37,7 @@ Concourse のターゲット
 
 いつも完全に同じ結果を得るために、`fly` はすべての`fly`リクエストに対する特別なターゲットAPIを要求します。
 
-まず、`tutorial`という名前のエイリアスを与えます。（`tutorial`は全てのチュートリアルラッパースクリプトとして使用されています）
+まず、`tutorial`という別名を与えます。（`tutorial`は全てのチュートリアルのラッパースクリプトとして使用されています）
 
 ```
 fly --target tutorial login  --concourse-url http://192.168.100.4:8080 sync
@@ -66,7 +66,7 @@ targets:
 
 > @alexsuraci: I promise you'll end up liking it more than having an implicit target state :) Makes reusing commands from shell history much less dangerous (rogue fly configure can be bad)
 
-Tutorials
+チュートリアル
 ---------
 
 ### 01 - Hello World task
@@ -76,7 +76,7 @@ cd 01_task_hello_world
 fly -t tutorial execute -c task_hello_world.yml
 ```
 
-The output starts with
+出力は以下のようになる。
 
 ```
 Connecting to 192.168.100.4:8080 (192.168.100.4:8080)
@@ -84,9 +84,10 @@ Connecting to 192.168.100.4:8080 (192.168.100.4:8080)
 initializing with docker:///busybox
 ```
 
-Every task in Concourse runs within a "container" (as best available on the target platform). The `task_hello_world.yml` configuration shows that we are running on a `linux` platform using a container image defined by `docker:///busybox`.
+Concourseにある全てのタスクは"コンテナ"で実行される(ターゲットプラットフォームに最善の形で)。`task_hello_world.yml`コンフィグレーションは、`docker:///busybox`によって定義されたコンテナイメージを用いた`linux`プラットフォームの実行を示しています。
 
-Within this container it will run the command `echo hello world`:
+このコンテナの中で`echo hello world`コマンドを実行させましょう。
+
 
 ```yaml
 ---
@@ -99,9 +100,10 @@ run:
   args: [hello world]
 ```
 
-At this point in the output above it is downloading a Docker image `busybox`. It will only need to do this once; though will recheck every time that it has the latest `busybox` image.
+出力がある前の時点では、Docker イメージ `busybox`のダウンロードを行っている。
+ダウンロードはただ一回実行するだけでよく、実行時にはいつも最新の`busybox` イメージがあるかをチェックしてくれる。
 
-Eventually it will continue:
+さらに続けて行きましょう。
 
 ```
 running echo hello world
@@ -109,7 +111,7 @@ hello world
 succeeded
 ```
 
-Try changing the `image:` and the `run:` and run a different task:
+`image:` と `run:` を 違うタスクに変えて実行してみましょう。
 
 ```yaml
 ---
@@ -122,7 +124,7 @@ run:
   args: [-a]
 ```
 
-This task file is provided for convenience:
+このタスクファイルは便利に使えます。
 
 ```
 $ fly -t tutorial execute -c task_ubuntu_uname.yml
@@ -134,18 +136,19 @@ Linux mjgia714efl 3.13.0-49-generic #83-Ubuntu SMP Fri Apr 10 20:11:33 UTC 2015 
 succeeded
 ```
 
-A common pattern is for Concourse tasks to `run:` wrapper shell scripts, rather than directly invoking commands.
+直接的なコマンドの呼び出しよりも、Concourse タスクの`run:` にやらせることが一般的なパターンです。
+（`run:` はシェルスクリプトのラッパー）
 
-As your tasks and wrapper scripts build up into complex pipelines you will appreciate the following pattern:
+タスクとラッパースクリプトに関して言えば、次のようなルールで実行するパイプラインを構築します。
 
--	Give your task files and wrapper shell scripts the same base name
+-	タスクファイルとラッパーシェルスクリプトに同じベースネームを与える
 
-In the `01_task_hello_world` folder you can see two files:
+`01_task_hello_world` フォルダの中にある２つのファイルをみてください。
 
 -	`task_show_uname.yml`
 -	`task_show_uname.sh`
 
-When you execute a task file directly via `fly`, it will upload the current folder as an input to the task. This means the wrapper shell script is available for execution:
+`fly` によってタスクファイルが直接的に実行されるとき、タスクへの入力として現在のフォルダが使用されます。これはラッパーシェルスクリプトが実行に利用できることを意味しています。
 
 ```
 $ fly -t tutorial execute -c task_show_uname.yml
@@ -156,10 +159,10 @@ running ./task_show_uname.sh
 Linux mjgia714eg3 3.13.0-49-generic #83-Ubuntu SMP Fri Apr 10 20:11:33 UTC 2015 x86_64 GNU/Linux
 succeeded
 ```
+上で示した`running ./task_show_uname.sh`という出力は、`task_show_uname.yml`がタスク実行用のラッパースクリプトに処理を委譲したことを表しています。
 
-The output above `running ./task_show_uname.sh` shows that the `task_show_uname.yml` task delegated to a wrapper script to perform the task work.
 
-The `task_show_uname.yml` task is:
+`task_show_uname.yml` タスクは次のようになっています。
 
 ```yaml
 platform: linux
@@ -173,17 +176,19 @@ run:
   path: ./task_show_uname.sh
 ```
 
-The new concept above is `inputs:`.
+ここで、新たに示されたコンセプト`inputs:`を説明します。
 
-In order for a task to run a wrapper script, it must be given access to the wrapper script. In order for a task to process data files, it must be given access to those data files.
+タスクがラッパースクリプトを実行するためには、ラッパースクリプトへのアクセスする必要があります。
+タスクがデータファイルを処理するためには、データファイルへアクセスする必要があります。
 
-In Concourse these are `inputs` to a task.
+Concourseにおいて、タスクのそれらは`inputs`によって表現されます
 
-Given that we are running the task directly from the `fly` CLI, and we're running it from our host machine inside the `01_task_hello_world` folder, then the current host machine folder will be uploaded to Concourse and made available as an input called `01_task_hello_world`.
+`fly`によって直接的にタスクが実行されると同時に、`01_task_hello_world`の内側にある私たちのホストマシンから実行され、
+現在のホストマシンのフォルダがConcourseにアップロードされ、`01_task_hello_world`と呼ばれる入力が利用可能になる。
 
-Later when we look at Jobs with inputs, tasks and outputs we'll return to passing `inputs` into tasks within a Job.
+入力があるジョブを後で見るとき、仕事とアウトプットはジョブの範囲内のタスクの中へインプットを通してリターンされる。
 
-Consider the `inputs:` snippet above:
+上に示した`inputs`のスニペットについて考慮すると、
 
 ```yaml
 inputs:
@@ -191,16 +196,16 @@ inputs:
   path: .
 ```
 
-This is saying:
+これらは次のことを言っている。
 
-1.	I want to receive an input folder called `01_task_hello_world`
-2.	I want it to be placed in the folder `.` (that is, the root folder of the task when its running)
+1.	私は`01_task_hello_world` と呼ばれる入力フォルダを受け取りたい。
+2.	私はそれを `.` フォルダに置きたい。(`.`は実行されるとき、タスクのルートフォルダとみなされる)
 
-By default, without `path:` an input will be placed in a folder with the same name as the input itself.
+デフォルトでは、`path:`に何もなかった場合、入力自身と同じ名前のフォルダに置き換えられる。
 
-Given the list of `inputs`, we now know that the `task_show_uname.sh` script (which is in the same folder) will be available in the root folder of the running task.
+`inputs`のリストが与えられたとき、（同じ名前のフォルダの中にある）`task_show_uname.sh`スクリプトは実行タスクのルートフォルダで利用可能になる。
 
-This allows us to invoke it:
+これは次のような呼び出しを許可する
 
 ```yaml
 run:
