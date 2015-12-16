@@ -220,7 +220,7 @@ fly set-pipeline -t tutorial -c pipeline.yml -p 02helloworld
 fly unpause-pipeline -p 02helloworld
 ```
 
-It will display the concourse pipeline (or any changes) and request confirmation:
+これらはコンコースのパイプライン（と何も変更がないこと）を表示し確認を求める。
 
 ```yaml
 jobs:
@@ -238,26 +238,28 @@ jobs:
           - hello world
 ```
 
-You will be prompted to apply any configuration changes each time you run `fly set-pipeline` (or its alias `fly sp`)
+変更確認
+`fly set-pipeline` (もしくは `fly sp`)を実行するたびになにも変更がないことの確認を承諾するプロンプトが表示される。
 
 ```
 apply configuration? (y/n):
 ```
 
-Press `y`.
+`y`を押してください。
 
-You should see:
+次のようなメッセージが表示されるはずです:
 
 ```
 pipeline created!
 you can view your pipeline here: http://192.168.100.4:8080/pipelines/02helloworld
 ```
 
-Go back to your browser and start the job manually. Click on `job-hello-world` and then click on the large `+` in the top right corner. Your job will run.
+ブラウザに戻ってジョブを手動で始めましょう。`job-hello-world`をクリックした後、右上隅にある大きな`+`をクリックしてください。
+ジョブが実行されます。
 
 ![job](http://cl.ly/image/3i2e0k0v3O2l/02-job-hello-world.gif)
 
-Clicking the top-left "Home" icon will show the status of our pipeline.
+左上隅の"Home"アイコンをクリックすると、パイプラインのステータスが表示されます。
 
 ### 03 - Tasks extracted into resources
 
