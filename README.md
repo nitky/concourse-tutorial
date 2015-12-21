@@ -263,11 +263,12 @@ you can view your pipeline here: http://192.168.100.4:8080/pipelines/02helloworl
 
 ### 03 - Tasks extracted into resources
 
-It is easy to iterate on a job's tasks by configuring them in the `pipeline.yml` as above. Eventually you might want to colocate a job task with one of the resources you are already pulling in.
+前にある`pipeline.yml`にあるコンフィグレーションによってジョブのタスクを簡単に繰り返すことができる。結局、あなたが既に引っぱり出したリソースたちの中に含まれるジョブタスクを同じ場所に配置したいかもしれない。
 
-This is a little convoluted example for our "hello world" task, but let's assume the task we want to run is the one from "01 - Hello World task" above. It's stored in a git repo.
+これは少し複雑な"hello world" タスクの例であるが、私たちが実行したいタスクが事前に示した"01 - Hello World task"からのものであると仮定しよう。
+それはgitリポジトリに保存されている。
 
-In our `pipeline.yml` we add the tutorial's git repo as a resource:
+`pipeline.yml`の中へ、チュートリアルのgitリポジトリにリソースとして加える。
 
 ```yaml
 resources:
@@ -277,7 +278,7 @@ resources:
     uri: https://github.com/starkandwayne/concourse-tutorial.git
 ```
 
-Now we can consume that resource in our job. Update it to:
+今、私たちはジョブをリソースとして消費することができる。　アップデートしましょう。
 
 ```yaml
 jobs:
@@ -289,15 +290,15 @@ jobs:
     file: resource-tutorial/01_task_hello_world/task_hello_world.yml
 ```
 
-Our `plan:` specifies that first we need to `get` the resource `resource-tutorial`.
 
-Second we use the `01_task_hello_world/task_hello_world.yml` file from `resource-tutorial` as the task configuration.
+最初の`get`は`resource-tutorial`というリソースを得るために必要だと、私たちの`plan:`で明示されています。
+次に、タスクコンフィグレーションである`resource-tutorial`から`01_task_hello_world/task_hello_world.yml`のファイルを使用します。
 
-Apply the updated pipeline using `fly set-pipeline -t tutorial -c pipeline.yml -p 03_resource_job`. #TODO find out how to do that better
+`fly set-pipeline -t tutorial -c pipeline.yml -p 03_resource_job`を用いてパイプラインのアップデートを承認しましょう。
 
-Note: `fly` has shorter aliases for it's commands, `fly sp` is shorthand for `fly set-pipeline`
+脚注: `fly` は楽にコマンドが打てるように短いエイリアスがある。`fly sp` が `fly set-pipeline`と省略できるように。
 
-Or run the pre-created pipeline from the tutorial:
+あるいは、チュートリアルによって事前に構築されたパイプラインを実行してみましょう。
 
 ```
 cd ../03_resource_job
@@ -307,31 +308,32 @@ fly unpause-pipeline -t tutorial -p 03_resource_job
 
 ![resource-job](http://cl.ly/image/271z3T322l25/03-resource-job.gif)
 
-After manually triggering the job via the UI, the output will look like:
+UIでジョブを手動実行した後、出力はこのようになります。
 
 ![job-task-from-wrapper](http://cl.ly/image/0Q3m223v2l3M/job-task-from-wrapper.png)
 
-The `job-hello-world` job now has two steps in its build plan.
+`job-hello-world` で定義されたビルドプランのジョブには二つのステップがあります。
 
-The first step fetches the git repository for these training materials and tutorials. This is a "resource" called `resource-tutorial`.
+一つ目のステップは、gitリポジトリからトレーニング教材とチュートリアルを取得することです。この"resource"は`resource-tutorial`と呼ばれています。
 
-This resource can now be an input to any task in the job build plan.
+このリソースはどんなジョブのビルドプランを含むタスクでも入力とすることができます。
 
-The second step runs a user-defined task. We give the task a name `hello-world` which will be displayed in the UI output. The task itself is not described in the pipeline. Instead it is described in `01_task_hello_world/task_hello_world.yml` from the `resource-tutorial` input.
+二つ目のステップは、ユーザ定義のタスクを実行することです。UIの出力に表示された、タスク名`hello-world`が与えられます。タスク自身は
+パイプラインの中で記述されません。その代わり、`resource-tutorial`の入力によって`01_task_hello_world/task_hello_world.yml`の中に記述されます。
 
-There is a benefit and a downside to abstracting tasks into YAML files outside of the pipeline.
+パイプラインの外側に出して、YAMLファイルの中にタスクを記述することは利点と欠点がそれぞれあります。
 
-The benefit is that the behavior of the task can be modified to match the input resource that it is operating upon. For example, if the input resource was a code repository with tests then the task file could be kept in sync with how the code repo needs to have its tests executed.
+利点は、作用するインプットリソースとマッチするようにタスクの振る舞いを修正できることが挙げられます。例えば、もし入力リソースがテスト付きのコードリポジトリであるならば、コードリポジトリはどのようにテストを持つ必要があるかの点でタスクファイルの同期を保ち続けることができます。
 
-The downside is that the `pipeline.yml` no longer explains exactly what commands will be invoked. Comprehension is potentially reduced. `pipeline.yml` files can get long and it can be hard to read and comprehend all the YAML.
+欠点は、`pipeline.yml`がどんなコマンドを実行するかを正確に説明しないことです。ファイルから理解できることが減るということです。
+`pipeline.yml`ファイルが長くなればなるほど、全てのYAMLを読んで理解することは困難になるかもしれません
 
-Consider comprehension of other team members when making these choices. "What does this pipeline actually do?!"
+これらの選択をする場合、他のチームメンバの理解を考える必要があります。「このパイプラインは実際何をするんだ！」
+ひとつのアイデアはタスクファイルの名前付けをどうするか考慮することです。例えば、ラッパースクリプトの実行内容によって名前付けを行うのも良いかもしれません。
 
-One idea is to consider how you name your task files, and thus how you name the wrapper scripts that they invoke.
+その目的と振る舞いを説明する（長い）名前を使うことを考えましょう。
 
-Consider using (long) names that describe their purpose/behavior.
-
-Try to make the `pipeline.yml` readable. It will become important orchestration within your team/company/project; and everyone needs to know how it actually works.
+大切なことは`pipeline.yml`を読めるように作ることです。それはチーム/会社/プロジェクトの中で重要なオーケストレーションとになるでしょう。誰もがどのようにそれが実際動作するのかを知っているベキです。
 
 ### 04 - Get job output in terminal
 
