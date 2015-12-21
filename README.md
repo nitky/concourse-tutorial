@@ -337,15 +337,14 @@ UIでジョブを手動実行した後、出力はこのようになります。
 
 ### 04 - Get job output in terminal
 
-The `job-hello-world` had terminal output from its resource fetch of a git repo and of the `hello-world` task running.
-
-You can also view this output from the terminal with `fly`:
+`job-hello-world` はgitレポジトリとタスクの実行で取って来られたリソースからのターミナル出力を持ちます。
+また、ターミナルで`fly`を実行すると、このような出力を見ることができるでしょう。
 
 ```
 fly -t tutorial watch -j 03_resource_job/job-hello-world
 ```
 
-The output will be similar to:
+出力は次のようになるでしょう。
 
 ```
 Cloning into '/tmp/build/get'...
