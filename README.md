@@ -373,9 +373,9 @@ fly -t tutorial watch -j 03_resource_job/job-hello-world
 
 ### 06 - Triggering jobs - the `time` resource
 
-"resources are checked every minute, but there's a shorter (10sec) interval for determining when a build should run; time resource is to just ensure a build runs on some rough periodicity; we use it to e.g. continuously run integration/acceptance tests to weed out flakiness" - alex
+"ソースは毎分チェックされるが、ビルドが実行されるべきとき、それを決定するための少しのインターバル（10秒）がある。時間リソースは、おおよそ周期的にビルドが実行されることを保証する必要がある。これらのことを用いて、例えば私たちはダメなところを見つけ出すために、インテグレーション／アクセプタンスのテストを継続的に実行する" - アレックス
 
-The net result is that a timer of `2m` will trigger every 2 to 3 minutes.
+最終的な結果は、`2m`のタイマーが毎度2分から3分の間に起動するということだ。
 
 ### 20 - Available concourse resources
 
