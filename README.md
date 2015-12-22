@@ -357,15 +357,15 @@ succeeded
 
 ### 05 - Trigger a Job via the Concourse API
 
-Our concourse in vagrant has an API running at `http://192.168.100.4:8080`. The `fly` CLI targets this endpoint by default.
+vagrant中のConcourseは `http://192.168.100.4:8080`で実行中のAPIがある。デフォルトで`fly`はこのエンドポイントをターゲットにする。
 
-We can trigger a job to be run using that API. For example, using `curl`:
+そのAPIを使って実行させることで、ジョブを起動することができる。例えば、`curl`:を用いて
 
 ```
 curl http://192.168.100.4:8080/pipelines/03_resource_job/jobs/job-hello-world/builds -X POST
 ```
 
-You can then watch the output in your terminal using `fly watch` from above:
+上のコマンドを実行するとき、`fly watch`を用いることで、上のコマンドターミナルの出力を見ることができる、
 
 ```
 fly -t tutorial watch -j 03_resource_job/job-hello-world
