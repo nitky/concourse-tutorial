@@ -381,21 +381,22 @@ fly -t tutorial watch -j 03_resource_job/job-hello-world
 
 https://github.com/concourse?query=resource
 
--	[bosh-deployment-resource](https://github.com/concourse/bosh-deployment-resource) - deploy bosh releases as part of your pipeline
--	[semver-resource](https://github.com/concourse/semver-resource) - automated semantic version bumping
--	[bosh-io-release-resource](https://github.com/concourse/bosh-io-release-resource) - Tracks the versions of a release on bosh.io
--	[s3-resource](https://github.com/concourse/s3-resource) - Concourse resource for interacting with AWS S3
--	[git-resource](https://github.com/concourse/git-resource) - Tracks the commits in a git repository.
--	[bosh-io-stemcell-resource](https://github.com/concourse/bosh-io-stemcell-resource) - Tracks the versions of a stemcell on bosh.io.
+-	[bosh-deployment-resource](https://github.com/concourse/bosh-deployment-resource) - パイプラインの一部として構成されたboshリリースのデプロイ
+-	[semver-resource](https://github.com/concourse/semver-resource) - セマンティックバージョンの自動更新
+-	[bosh-io-release-resource](https://github.com/concourse/bosh-io-release-resource) - bosh.io上のリリースバージョンの追跡
+-	[s3-resource](https://github.com/concourse/s3-resource) - AWS S3 に関するConcourseのリソース
+-	[git-resource](https://github.com/concourse/git-resource) - gitリポジトリの中のコミットの追跡
+-	[bosh-io-stemcell-resource](https://github.com/concourse/bosh-io-stemcell-resource) - bosh.io上のstemcellのバージョンの追跡
 -	[vagrant-cloud-resource](https://github.com/concourse/vagrant-cloud-resource) - manages boxes in vagrant cloud, by provider
--	[docker-image-resource](https://github.com/concourse/docker-image-resource) - a resource for docker images
--	[archive-resource](https://github.com/concourse/archive-resource) - downloads and extracts an archive (currently tgz) from a uri
--	[github-release-resource](https://github.com/concourse/github-release-resource) - a resource for github releases
--	[tracker-resource](https://github.com/concourse/tracker-resource) - pivotal tracker output resource
--	[time-resource](https://github.com/concourse/time-resource) - a resource for triggering on an interval
--	[cf-resource](https://github.com/concourse/cf-resource) - Concourse resource for interacting with Cloud Foundry
+providerによるvagrant cloudのボックスの管理
+-	[docker-image-resource](https://github.com/concourse/docker-image-resource) - dockerイメージ用リソース
+-	[archive-resource](https://github.com/concourse/archive-resource) - uriからのダウンロードとアーカイブ(今のところtgz)の展開
+-	[github-release-resource](https://github.com/concourse/github-release-resource) - githubリリースのためのリソース
+-	[tracker-resource](https://github.com/concourse/tracker-resource) - pivotal trackerのリソース出力
+-	[time-resource](https://github.com/concourse/time-resource) - 定期的にトリガーを引くためのリソース
+-	[cf-resource](https://github.com/concourse/cf-resource) - Cloud Foundryに関するConcourseのリソース
 
-To find out which resources are available on your target Concourse you can ask the API endpoint `/api/v1/workers`:
+コンコースでどのようなリソースが利用可能かは、APIエンドポイント `/api/v1/workers`:で探し出すことができる。
 
 ```
 $ curl -s http://192.168.100.4:8080/api/v1/workers | jq -r ".[0].resource_types[].type" | sort
